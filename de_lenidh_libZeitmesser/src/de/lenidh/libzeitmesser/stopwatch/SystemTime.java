@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 Moritz Heindl <lenidh[at]gmail[dot]com>
+ * Copyright (C) 2013 Moritz Heindl <lenidh[at]gmail[dot]com>
  *
  * This file is part of libZeitmesser.
  *
@@ -17,10 +17,13 @@
  * along with libZeitmesser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lenidh.libzeitmesser;
+package de.lenidh.libzeitmesser.stopwatch;
 
-public interface Display {
-	public void updateTime();
-	public void updateState();
-	public void updateLaps();
+/**
+ * \brief Access to the system time.
+ * 
+ * TODO: Comments
+ */
+public interface SystemTime {
+	public long getTime();
 }

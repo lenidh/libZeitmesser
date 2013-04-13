@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2012 Moritz Heindl <lenidh[at]gmail[dot]com>
+ * Copyright (C) 2013 Moritz Heindl <lenidh[at]gmail[dot]com>
  *
  * This file is part of libZeitmesser.
  *
@@ -17,29 +17,70 @@
  * along with libZeitmesser.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.lenidh.libzeitmesser;
+package de.lenidh.libzeitmesser.stopwatch;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @brief A stopwatch
+ * 
+ * This is a stopwatch. It supports all basic tasks like starting, pausing and
+ * laps.
+ */
 public class Watch {
 	
+	/**
+	 * SystemTime object of the current application.
+	 */
 	private final SystemTime systemTime;
 	
+	/**
+	 * A list of Displays that will be notified about changes.
+	 */
 	private final List<Display> displayList;
 	
+	/**
+	 * The timestamp of measurement start increased by the time in pause mode.
+	 */
 	private Long baseTS = null;
 	
-	private long baseOffset = 0;
-	
+	/**
+	 * Timestamp when entering the pause mode.
+	 */
 	private Long pauseTS = null;
 	
+	/**
+	 * The LapContainer holding the laps of this Watch.
+	 */
+	private LapContainer lapContainer;
+	
+	/**
+	 * TODO
+	 * @param systemTime TODO
+	 */
 	public Watch(SystemTime systemTime) {
 		this.systemTime = systemTime;
 		this.displayList = new ArrayList<Display>();
+		this.lapContainer = new LapContainer(this);
 		this.reset();
 	}
 	
+	/**
+	 * @brief Returns the LapContainer of this Watch
+	 * 
+	 * @return LapContainer of this Watch
+	 */
+	public LapContainer getLapContainer() {
+		return this.lapContainer;
+	}
+	
+	/**
+	 * @brief Start or resume the time measurement.
+	 * 
+	 * If the Watch was just created or reseted, a new measurement is started.
+	 * When the measurement was paused, it will be resumed.
+	 */
 	public void start() {
 		long currentTime = this.systemTime.getTime();
 		
@@ -47,29 +88,46 @@ public class Watch {
 			// Start new measurement after a reset.
 			this.baseTS = currentTime;
 		} else {
-			// If measurement was paused, offset and stamp must be increased by the pause time.
+			// If measurement was paused, offset and stamp must be increased by
+			// the pause time.
 			long pauseTime = currentTime - pauseTS;
-			this.baseOffset += pauseTime;
 			this.baseTS += pauseTime;
 			
 			this.pauseTS = null;
 		}
 	}
 	
+	/**
+	 * @brief Stop the time measurement.
+	 */
 	public void stop() {
 		this.pauseTS = this.systemTime.getTime();
 	}
 	
+	/**
+	 * @brief Add a new Lap to the LapContainer.
+	 */
 	public void record() {
-		//TODO: Create a lap and add it to the container.
+		this.lapContainer.addLap();
 	}
 	
+	/**
+	 * @brief Reset the Watch.
+	 * 
+	 * This resets the Watch's state. It will also clear the LapContainer and
+	 * marks all Laps as invalid. 
+	 */
 	public void reset() {
 		this.baseTS = null;
-		this.baseOffset = 0;
 		this.pauseTS = null;
+		this.lapContainer.clear();
 	}
 	
+	/**
+	 * @brief Returns the elapsed Time in milliseconds.
+	 * 
+	 * @return elapsed time
+	 */
 	public long getElapsedTime() {
 		long elapsedTime = 0;
 		if(this.baseTS != null) {
@@ -82,10 +140,12 @@ public class Watch {
 		return elapsedTime;
 	}
 	
-	public long getBaseOffset() {
-		return this.baseOffset;
-	}
-	
+	/**
+	 * @brief Add a Display to be notified by this Watch.
+	 * @param d the Display
+	 * 
+	 * @return TODO
+	 */
 	public boolean addDisplay(Display d) {
 		boolean listChanged = false;
 		boolean contains = this.displayList.contains(d);
@@ -95,6 +155,11 @@ public class Watch {
 		return listChanged;
 	}
 	
+	/**
+	 * @brief Remove a Display from the Watch's list.
+	 * @param d the Display
+	 * @return TODO
+	 */
 	public boolean removeDisplay(Display d) {
 		return this.displayList.remove(d);
 	}
