@@ -60,8 +60,19 @@ public class Watch {
 	 * @param systemTime TODO
 	 */
 	public Watch(SystemTime systemTime) {
+		if(systemTime == null) throw new IllegalArgumentException("systemTime was null");
 		this.systemTime = systemTime;
 		this.displayList = new ArrayList<Display>();
+		this.lapContainer = new LapContainer(this);
+		this.reset();
+	}
+	
+	/**
+	 * @brief This constructor is for test purposes only.
+	 */
+	Watch() {
+		this.systemTime = null;
+		this.displayList = null;
 		this.lapContainer = new LapContainer(this);
 		this.reset();
 	}

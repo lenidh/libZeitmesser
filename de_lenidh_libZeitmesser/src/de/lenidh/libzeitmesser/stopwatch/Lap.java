@@ -58,7 +58,7 @@ public class Lap {
 	 * @throws InvalidLapException The lap was removed from its LapContainer.
 	 */
 	private void checkValidity() throws InvalidLapException {
-		if(!this.invalid) {
+		if(this.invalid) {
 			throw new InvalidLapException();
 		}
 	}
