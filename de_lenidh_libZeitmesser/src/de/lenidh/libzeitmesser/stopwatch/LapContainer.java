@@ -86,6 +86,10 @@ public class LapContainer {
 		return previousLap;
 	}
 	
+	public int size() {
+		return this.elapsedTimeOrder.size();
+	}
+	
 	public Lap[] getLapsAsArray() {
 		return (Lap[]) this.elapsedTimeOrder.toArray(new Lap[0]);
 	}

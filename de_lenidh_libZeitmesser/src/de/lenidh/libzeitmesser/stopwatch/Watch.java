@@ -21,6 +21,8 @@ package de.lenidh.libzeitmesser.stopwatch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * @brief A stopwatch
@@ -55,15 +57,26 @@ public class Watch {
 	 */
 	private LapContainer lapContainer;
 	
+	private Timer timer = new Timer();
+	
+	private TimerTask timerTask = null;
+	
+	private long interval;
+	
+	public Watch(SystemTime systemTime) {
+		this(systemTime, 1000);
+	}
+	
 	/**
 	 * TODO
 	 * @param systemTime TODO
 	 */
-	public Watch(SystemTime systemTime) {
+	public Watch(SystemTime systemTime, long interval) {
 		if(systemTime == null) throw new IllegalArgumentException("systemTime was null");
 		this.systemTime = systemTime;
 		this.displayList = new ArrayList<Display>();
 		this.lapContainer = new LapContainer(this);
+		this.interval = interval;
 		this.reset();
 	}
 	
@@ -72,7 +85,7 @@ public class Watch {
 	 */
 	Watch() {
 		this.systemTime = null;
-		this.displayList = null;
+		this.displayList = new ArrayList<Display>();
 		this.lapContainer = new LapContainer(this);
 		this.reset();
 	}
@@ -106,6 +119,9 @@ public class Watch {
 			
 			this.pauseTS = null;
 		}
+		
+		this.notifyAllStateChanged();
+		if(this.displayList.size() > 0) this.startTimerTask();
 	}
 	
 	/**
@@ -113,13 +129,21 @@ public class Watch {
 	 */
 	public void stop() {
 		this.pauseTS = this.systemTime.getTime();
+		this.stopTimerTask();
+		this.notifyAllStateChanged();
 	}
 	
 	/**
 	 * @brief Add a new Lap to the LapContainer.
+	 * 
+	 * Calling this method will add a new Lap to the Watch's LapContainer, if
+	 * the Watch is running.
 	 */
 	public void record() {
-		this.lapContainer.addLap();
+		if(this.isRunning()) {
+			this.lapContainer.addLap();
+			this.notifyAllLapsChanged();
+		}
 	}
 	
 	/**
@@ -129,9 +153,13 @@ public class Watch {
 	 * marks all Laps as invalid. 
 	 */
 	public void reset() {
+		this.stopTimerTask();
 		this.baseTS = null;
 		this.pauseTS = null;
 		this.lapContainer.clear();
+		this.notifyAllStateChanged();
+		this.notifyAllTimeChanged();
+		this.notifyAllLapsChanged();
 	}
 	
 	/**
@@ -160,6 +188,26 @@ public class Watch {
 		return (this.baseTS != null && this.pauseTS == null);
 	}
 	
+	private void startTimerTask() {
+		if(this.timerTask == null) {
+			this.timerTask = new TimerTask() {
+				
+				@Override
+				public void run() {
+					notifyAllTimeChanged();
+				}
+			};
+			this.timer.scheduleAtFixedRate(this.timerTask, 0, this.interval);
+		}
+	}
+	
+	private void stopTimerTask() {
+		if(this.timerTask != null) {
+			this.timerTask.cancel();
+			this.timerTask = null;
+		}
+	}
+	
 	/**
 	 * @brief Add a Display to be notified by this Watch.
 	 * @param d the Display
@@ -172,6 +220,9 @@ public class Watch {
 		if(!contains) {
 			listChanged = this.displayList.add(d);
 		}
+		if(this.displayList.size() > 0 && this.isRunning()) {
+			this.startTimerTask();
+		}
 		return listChanged;
 	}
 	
@@ -181,6 +232,26 @@ public class Watch {
 	 * @return TODO
 	 */
 	public boolean removeDisplay(Display d) {
-		return this.displayList.remove(d);
+		boolean retVal = this.displayList.remove(d);
+		if(this.displayList.size() <= 0) this.stopTimerTask();
+		return retVal;
+	}
+	
+	private void notifyAllTimeChanged() {
+		for(Display d : this.displayList) {
+			d.updateTime();
+		}
+	}
+	
+	private void notifyAllStateChanged() {
+		for(Display d : this.displayList) {
+			d.updateState();
+		}
+	}
+	
+	private void notifyAllLapsChanged() {
+		for(Display d : this.displayList) {
+			d.updateLaps();
+		}
 	}
 }
