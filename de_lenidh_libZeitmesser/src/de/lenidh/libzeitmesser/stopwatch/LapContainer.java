@@ -19,7 +19,6 @@
 
 package de.lenidh.libzeitmesser.stopwatch;
 
-import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,17 +43,13 @@ public class LapContainer {
 		int numberOfLaps = lapTimeOrder.size();
 		Lap lap = new Lap(this, this.watch.getElapsedTime());
 		this.elapsedTimeOrder.add(lap);
-		// TODO: lapOrder.add()
-		try {
-			if(numberOfLaps <= 0) lapTimeOrder.add(lap);
-			for(int i = 0; i < numberOfLaps; i++) {
-				if(lapTimeOrder.get(i).getLapTime() > lap.getLapTime()) {
-					lapTimeOrder.add(i, lap);
-					break;
-				}
+		
+		if(numberOfLaps <= 0) lapTimeOrder.add(lap);
+		for(int i = 0; i < numberOfLaps; i++) {
+			if(lapTimeOrder.get(i).getLapTime() > lap.getLapTime()) {
+				lapTimeOrder.add(i, lap);
+				break;
 			}
-		} catch (InvalidLapException e) {
-			// TODO
 		}
 	}
 	

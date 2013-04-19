@@ -10,7 +10,6 @@ public class TestWatch extends Watch {
 	boolean containerInitialized = false;
 	
 	public TestWatch() {
-		LapContainer container = super.getLapContainer();
 		this.timeList = new ArrayList<Long>();
 		this.timeList.add(10000L);
 		this.timeList.add(11000L);

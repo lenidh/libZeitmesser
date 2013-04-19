@@ -84,13 +84,9 @@ public class LapContainerTest {
 		container.addLap();
 		container.addLap();
 		Lap[] laps = container.getLapsAsArray();
-		try {
-			assertEquals(10000, laps[0].getElapsedTime());
-			assertEquals(11000, laps[1].getElapsedTime());
-			assertEquals(15000, laps[2].getElapsedTime());
-		} catch (InvalidLapException e) {
-			fail("InvalidLapException was thrown without marking the Lap as invalid.");
-		}
+		
+		assertEquals(10000, laps[0].getElapsedTime());
+		assertEquals(11000, laps[1].getElapsedTime());
+		assertEquals(15000, laps[2].getElapsedTime());
 	}
-
 }

@@ -25,7 +25,6 @@ package de.lenidh.libzeitmesser.stopwatch;
  * TODO
  */
 public class Lap {
-	// TODO: Remove this crap of validity check.
 
 	/**
 	 * The LapContainer containing this lap.
@@ -38,11 +37,6 @@ public class Lap {
 	private long elapsedTime;
 	
 	/**
-	 * Whether this Lap was removed from its LapContainer.
-	 */
-	private boolean invalid = false;
-	
-	/**
 	 * TODO
 	 * @param container TODO
 	 * @param elapsedTime TODO
@@ -53,29 +47,18 @@ public class Lap {
 	}
 	
 	/**
-	 * Checks if this Lap was removed from its LapContainer.
-	 * 
-	 * @throws InvalidLapException The lap was removed from its LapContainer.
-	 */
-	private void checkValidity() throws InvalidLapException {
-		if(this.invalid) {
-			throw new InvalidLapException();
-		}
-	}
-	
-	/**
 	 * Returns the time elapsed until this Lap was created.
 	 * 
 	 * @return elapsed time
 	 * @throws InvalidLapException
 	 */
-	public long getElapsedTime() throws InvalidLapException {
-		this.checkValidity();
+	public long getElapsedTime() {
+		if(container == null) return -1;
 		return this.elapsedTime;
 	}
 	
-	public long getElapsedTimeDiff() throws InvalidLapException {
-		this.checkValidity();
+	public long getElapsedTimeDiff() {
+		if(container == null) return -1;
 		long elapsedTimeDiff;
 		Lap firstLap = this.container.getFirstLap();
 		if(firstLap == this || firstLap == null) {
@@ -86,8 +69,8 @@ public class Lap {
 		return elapsedTimeDiff;
 	}
 	
-	public long getLapTime() throws InvalidLapException {
-		this.checkValidity();
+	public long getLapTime() {
+		if(container == null) return -1;
 		long lapTime;
 		Lap previousLap = this.container.getPreviousLap(this);
 		if(previousLap == null) {
@@ -98,8 +81,8 @@ public class Lap {
 		return lapTime;
 	}
 	
-	public long getLapTimeDiff() throws InvalidLapException {
-		this.checkValidity();
+	public long getLapTimeDiff() {
+		if(container == null) return -1;
 		long lapTimeDiff;
 		Lap shortestLap = this.container.getShortestLap();
 		if(shortestLap == this || shortestLap == null) {
@@ -110,7 +93,12 @@ public class Lap {
 		return lapTimeDiff;
 	}
 	
+	public boolean isInvalid() {
+		if(this.container == null) return true;
+		return false;
+	}
+	
 	void markInvalid() {
-		this.invalid = true;
+		this.container = null;
 	}
 }

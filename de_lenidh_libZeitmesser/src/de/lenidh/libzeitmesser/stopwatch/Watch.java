@@ -152,6 +152,15 @@ public class Watch {
 	}
 	
 	/**
+	 * @brief Returns the measurement state.
+	 * 
+	 * @return true if running, false else.
+	 */
+	public boolean isRunning() {
+		return (this.baseTS != null && this.pauseTS == null);
+	}
+	
+	/**
 	 * @brief Add a Display to be notified by this Watch.
 	 * @param d the Display
 	 * 
