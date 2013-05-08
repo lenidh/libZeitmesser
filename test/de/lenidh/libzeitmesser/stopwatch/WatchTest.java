@@ -16,18 +16,25 @@ public class WatchTest {
 	@Test
 	public void testStart() {
 		Watch watch = new Watch(new TestSystemTime());
-		watch.start();
 		
-		assertTrue(watch.isRunning());
+		watch.start();
+		assertTrue("State is 'running'.", watch.isRunning());
+		
+		watch.start();
+		assertEquals("Not reset on multiple start calls.", 1, watch.getElapsedTime());
+		
+		watch.stop();
+		watch.start();
+		assertEquals("Resume time measurment.", 3, watch.getElapsedTime());
 	}
 
 	@Test
 	public void testStop() {
 		Watch watch = new Watch(new TestSystemTime());
+		
 		watch.start();
 		watch.stop();
-		
-		assertFalse(watch.isRunning());
+		assertFalse("State is 'not running'.", watch.isRunning());
 	}
 
 	@Test

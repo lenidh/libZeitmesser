@@ -106,6 +106,9 @@ public class Watch {
 	 * When the measurement was paused, it will be resumed.
 	 */
 	public void start() {
+		// If already running, do nothing.
+		if(this.isRunning()) return;
+		
 		long currentTime = this.systemTime.getTime();
 		
 		if(pauseTS == null) {
