@@ -20,6 +20,7 @@
 package de.lenidh.libzeitmesser.stopwatch;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -90,7 +91,11 @@ public class LapContainer {
 		return this.elapsedTimeOrder.size();
 	}
 	
-	public Lap[] getLapsAsArray() {
+	public Lap[] toArray() {
 		return (Lap[]) this.elapsedTimeOrder.toArray(new Lap[0]);
+	}
+	
+	public List<Lap> toList() {
+		return Collections.unmodifiableList(this.elapsedTimeOrder);
 	}
 }
