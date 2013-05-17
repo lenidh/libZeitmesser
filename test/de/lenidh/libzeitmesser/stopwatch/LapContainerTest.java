@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import de.lenidh.libzeitmesser.stopwatch.LapContainer.Order;
+
 public class LapContainerTest {
 
 	@Test
@@ -104,5 +106,17 @@ public class LapContainerTest {
 		assertEquals(10000, laps.get(0).getElapsedTime());
 		assertEquals(11000, laps.get(1).getElapsedTime());
 		assertEquals(15000, laps.get(2).getElapsedTime());
+		
+		laps = container.toList(Order.elapsedTime);
+		
+		assertEquals(10000, laps.get(0).getElapsedTime());
+		assertEquals(11000, laps.get(1).getElapsedTime());
+		assertEquals(15000, laps.get(2).getElapsedTime());
+		
+		laps = container.toList(Order.lapTime);
+
+		assertEquals(1000, laps.get(0).getLapTime());
+		assertEquals(4000, laps.get(1).getLapTime());
+		assertEquals(10000, laps.get(2).getLapTime());
 	}
 }

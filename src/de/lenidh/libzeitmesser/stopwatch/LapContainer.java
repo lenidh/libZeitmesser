@@ -28,6 +28,11 @@ import java.util.List;
  */
 public class LapContainer {
 	
+	public enum Order {
+		elapsedTime,
+		lapTime,
+	}
+	
 	private Watch watch;
 
 	private List<Lap> elapsedTimeOrder;
@@ -96,6 +101,17 @@ public class LapContainer {
 	}
 	
 	public List<Lap> toList() {
-		return Collections.unmodifiableList(this.elapsedTimeOrder);
+		return this.toList(Order.elapsedTime);
+	}
+	
+	public List<Lap> toList(Order order) {
+		switch (order) {
+		case elapsedTime:
+			return Collections.unmodifiableList(this.elapsedTimeOrder);
+		case lapTime:
+			return Collections.unmodifiableList(this.lapTimeOrder);
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 }
