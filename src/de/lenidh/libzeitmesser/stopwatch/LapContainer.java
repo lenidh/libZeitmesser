@@ -50,13 +50,13 @@ public class LapContainer {
 		Lap lap = new Lap(this, this.watch.getElapsedTime());
 		this.elapsedTimeOrder.add(lap);
 		
-		if(numberOfLaps <= 0) lapTimeOrder.add(lap);
 		for(int i = 0; i < numberOfLaps; i++) {
 			if(lapTimeOrder.get(i).getLapTime() > lap.getLapTime()) {
 				lapTimeOrder.add(i, lap);
 				break;
 			}
 		}
+		if(numberOfLaps >= lapTimeOrder.size()) lapTimeOrder.add(lap);
 	}
 	
 	void clear() {
