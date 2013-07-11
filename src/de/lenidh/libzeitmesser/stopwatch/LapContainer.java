@@ -92,6 +92,10 @@ public class LapContainer {
 		return previousLap;
 	}
 	
+	public int NumberOf(Lap lap) {
+		return this.elapsedTimeOrder.indexOf(lap);
+	}
+	
 	public int size() {
 		return this.elapsedTimeOrder.size();
 	}
