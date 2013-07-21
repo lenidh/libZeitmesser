@@ -22,6 +22,11 @@ public class TestDisplay implements Display {
 		this.lapsUpdated++;
 	}
 	
+	@Override
+	public long getResolution() {
+		return 1;
+	}
+
 	public int getTimeUpdated() {
 		return timeUpdated;
 	}

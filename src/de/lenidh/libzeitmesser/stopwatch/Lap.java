@@ -52,43 +52,59 @@ public class Lap {
 	 * @return elapsed time
 	 * @throws InvalidLapException
 	 */
-	public long getElapsedTime() {
-		if(container == null) return -1;
-		return this.elapsedTime;
+	public long getElapsedTime(Display d) {
+		return getElapsedTime(d.getResolution());
 	}
 	
-	public long getElapsedTimeDiff() {
+	long getElapsedTime(long res) {
+		if(container == null) return -1;
+		return this.elapsedTime / res;
+	}
+	
+	public long getElapsedTimeDiff(Display d) {
+		return getElapsedTimeDiff(d.getResolution());
+	}
+	
+	long getElapsedTimeDiff(long res) {
 		if(container == null) return -1;
 		long elapsedTimeDiff;
 		Lap firstLap = this.container.getFirstLap();
 		if(firstLap == this || firstLap == null) {
 			elapsedTimeDiff = 0;
 		} else {
-			elapsedTimeDiff = this.elapsedTime - firstLap.elapsedTime;
+			elapsedTimeDiff = this.elapsedTime / res - firstLap.elapsedTime / res;
 		}
 		return elapsedTimeDiff;
 	}
 	
-	public long getLapTime() {
+	public long getLapTime(Display d) {
+		return getLapTime(d.getResolution());
+	}
+	
+	long getLapTime(long res) {
 		if(container == null) return -1;
 		long lapTime;
 		Lap previousLap = this.container.getPreviousLap(this);
 		if(previousLap == null) {
 			lapTime = this.elapsedTime;
 		} else {
-			lapTime = this.elapsedTime - previousLap.elapsedTime;
+			lapTime = this.elapsedTime / res - previousLap.elapsedTime / res;
 		}
 		return lapTime;
 	}
 	
-	public long getLapTimeDiff() {
+	public long getLapTimeDiff(Display d) {
+		return getLapTimeDiff(d.getResolution());
+	}
+	
+	long getLapTimeDiff(long res) {
 		if(container == null) return -1;
 		long lapTimeDiff;
 		Lap shortestLap = this.container.getShortestLap();
 		if(shortestLap == this || shortestLap == null) {
 			lapTimeDiff = 0;
 		} else {
-			lapTimeDiff = this.getLapTime() - shortestLap.getLapTime();
+			lapTimeDiff = this.getLapTime(res) - shortestLap.getLapTime(res);
 		}
 		return lapTimeDiff;
 	}

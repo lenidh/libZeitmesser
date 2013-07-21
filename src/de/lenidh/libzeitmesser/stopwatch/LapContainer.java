@@ -51,7 +51,7 @@ public class LapContainer {
 		this.elapsedTimeOrder.add(lap);
 		
 		for(int i = 0; i < numberOfLaps; i++) {
-			if(lapTimeOrder.get(i).getLapTime() > lap.getLapTime()) {
+			if(lapTimeOrder.get(i).getLapTime(1) > lap.getLapTime(1)) {
 				lapTimeOrder.add(i, lap);
 				break;
 			}

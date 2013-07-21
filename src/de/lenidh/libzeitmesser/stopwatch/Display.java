@@ -26,4 +26,5 @@ public interface Display {
 	public void updateTime();
 	public void updateState();
 	public void updateLaps();
+	public long getResolution();
 }

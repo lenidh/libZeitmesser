@@ -89,9 +89,9 @@ public class LapContainerTest {
 		container.addLap();
 		Lap[] laps = container.toArray();
 		
-		assertEquals(10000, laps[0].getElapsedTime());
-		assertEquals(11000, laps[1].getElapsedTime());
-		assertEquals(15000, laps[2].getElapsedTime());
+		assertEquals(10000, laps[0].getElapsedTime(1));
+		assertEquals(11000, laps[1].getElapsedTime(1));
+		assertEquals(15000, laps[2].getElapsedTime(1));
 	}
 	
 	@Test
@@ -103,20 +103,20 @@ public class LapContainerTest {
 		container.addLap();
 		List<Lap> laps = container.toList();
 		
-		assertEquals(10000, laps.get(0).getElapsedTime());
-		assertEquals(11000, laps.get(1).getElapsedTime());
-		assertEquals(15000, laps.get(2).getElapsedTime());
+		assertEquals(10000, laps.get(0).getElapsedTime(1));
+		assertEquals(11000, laps.get(1).getElapsedTime(1));
+		assertEquals(15000, laps.get(2).getElapsedTime(1));
 		
 		laps = container.toList(Order.elapsedTime);
 		
-		assertEquals(10000, laps.get(0).getElapsedTime());
-		assertEquals(11000, laps.get(1).getElapsedTime());
-		assertEquals(15000, laps.get(2).getElapsedTime());
+		assertEquals(10000, laps.get(0).getElapsedTime(1));
+		assertEquals(11000, laps.get(1).getElapsedTime(1));
+		assertEquals(15000, laps.get(2).getElapsedTime(1));
 		
 		laps = container.toList(Order.lapTime);
 
-		assertEquals(1000, laps.get(0).getLapTime());
-		assertEquals(4000, laps.get(1).getLapTime());
-		assertEquals(10000, laps.get(2).getLapTime());
+		assertEquals(1000, laps.get(0).getLapTime(1));
+		assertEquals(4000, laps.get(1).getLapTime(1));
+		assertEquals(10000, laps.get(2).getLapTime(1));
 	}
 }
