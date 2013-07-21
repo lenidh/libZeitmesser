@@ -86,7 +86,7 @@ public class Lap {
 		long lapTime;
 		Lap previousLap = this.container.getPreviousLap(this);
 		if(previousLap == null) {
-			lapTime = this.elapsedTime;
+			lapTime = this.elapsedTime / res;
 		} else {
 			lapTime = this.elapsedTime / res - previousLap.elapsedTime / res;
 		}
